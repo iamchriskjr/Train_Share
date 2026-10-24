@@ -18,28 +18,48 @@
       color: #fffbf8;
       font-family: 'Afacad', sans-serif;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 24px;
+      justify-content: space-between;
+      padding: 40px 24px 28px;
       text-align: center;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     .container {
-      max-width: 400px;
+      width: 100%;
+      max-width: 420px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
+      margin: auto 0;
     }
     .logo-container {
-      width: 90px;
-      height: 90px;
+      width: 33.333%;
+      max-width: 135px;
+      min-width: 105px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-top: 8px;
       animation: pulse 2s infinite ease-in-out;
+    }
+    .bottom-badge-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 20px;
+    }
+    .powered-by-logo {
+      width: 33.333%;
+      max-width: 140px;
+      min-width: 110px;
+      height: auto;
+      object-fit: contain;
+      opacity: 0.92;
     }
     .logo {
       width: 100%;
@@ -130,10 +150,10 @@
   </style>
 </head>
 <body>
+  <div class="logo-container">
+    <img src="Logo_Orange.webp" alt="TRAIN Logo" class="logo">
+  </div>
   <div class="container">
-    <div class="logo-container">
-      <img src="Logo_Orange.png" alt="TRAIN Logo" class="logo">
-    </div>
 
     <div class="spinner">
       <div></div>
@@ -152,6 +172,10 @@
     </div>
 
     <a id="fallback-btn" href="#" class="btn">Tap if app did not open</a>
+  </div>
+
+  <div class="bottom-badge-container">
+    <img src="orange-share-watermark.webp" alt="Powered by TRAIN" class="powered-by-logo">
   </div>
 
   <script>
