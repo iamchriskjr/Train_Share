@@ -193,6 +193,9 @@
       fallbackBtnEl.textContent = "Tap if app did not open";
     }
 
+    // Preview mode check (allows viewing the rendered page without auto-redirecting)
+    const isPreview = params.get('preview') === 'true' || params.has('preview') || params.has('noredirect');
+
     // 3. Construct deep link & fallback URLs
     const deepLinkUrl = "com.iamchriskjr.trainworkoutapp://import-split?id=" + encodeURIComponent(id || "");
     const fallbackUrl = "https://link.trainworkoutapp.com/5tgqfu";
@@ -200,18 +203,22 @@
     // Set buttons/links
     fallbackBtnEl.href = deepLinkUrl;
 
-    // 4. Execute deep link redirect immediately
-    if (id) {
-      window.location.href = deepLinkUrl;
-    }
-
-    // 5. Fallback timer if app is not installed
-    setTimeout(function() {
-      // Check if page is still visible (if app opened, visibilityState will be hidden)
-      if (document.visibilityState === 'visible') {
-        window.location.href = fallbackUrl;
+    if (!isPreview) {
+      // 4. Execute deep link redirect immediately
+      if (id) {
+        window.location.href = deepLinkUrl;
       }
-    }, 2000);
+
+      // 5. Fallback timer if app is not installed
+      setTimeout(function() {
+        // Check if page is still visible (if app opened, visibilityState will be hidden)
+        if (document.visibilityState === 'visible') {
+          window.location.href = fallbackUrl;
+        }
+      }, 2000);
+    } else {
+      console.log('Preview mode active: automatic deep link and store redirection disabled.');
+    }
   </script>
 </body>
 </html>
