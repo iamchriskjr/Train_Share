@@ -155,13 +155,20 @@
   </div>
 
   <script>
-    // 1. Get query params
+    // 1. Get query params & detect receiver browser/device language
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const name = params.get('name');
-    const lang = params.get('lang');
+    const urlLang = params.get('lang');
 
-    const isSpanish = lang === 'es';
+    // Detect browser/device language (e.g., 'es', 'es-ES', 'es-419')
+    const browserLang = (navigator.languages && navigator.languages.length > 0
+      ? navigator.languages[0]
+      : (navigator.language || navigator.userLanguage || '')
+    ).toLowerCase();
+
+    // Use URL lang if explicitly provided; otherwise automatically detect receiver device language
+    const isSpanish = urlLang ? (urlLang.toLowerCase() === 'es') : browserLang.startsWith('es');
 
     // 2. Set dynamic text & translate
     const titleEl = document.getElementById('title');
