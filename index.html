@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TRAIN: Import Split</title>
+  <meta property="og:title" content="TRAIN: Import Split">
+  <meta property="og:site_name" content="TRAIN: Workout App">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -148,7 +150,7 @@
 </head>
 <body>
   <div class="logo-container">
-    <img src="Logo_Orange.webp" alt="TRAIN Logo" class="logo">
+    <img src="/Logo_Orange.webp" alt="TRAIN Logo" class="logo">
   </div>
   <div class="container">
 
@@ -172,67 +174,75 @@
   </div>
 
   <div class="bottom-badge-container">
-    <img src="orange-share-watermark.webp" alt="Powered by TRAIN" class="powered-by-logo">
+    <img src="/orange-share-watermark.webp" alt="Powered by TRAIN" class="powered-by-logo">
   </div>
 
   <script>
-    // 1. Get query params & detect receiver browser/device language
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const id = params.get('id') || '';
     const name = params.get('name');
     const urlLang = params.get('lang');
 
-    // Detect browser/device language (e.g., 'es', 'es-ES', 'es-419')
     const browserLang = (navigator.languages && navigator.languages.length > 0
       ? navigator.languages[0]
       : (navigator.language || navigator.userLanguage || '')
     ).toLowerCase();
 
-    // Use URL lang if explicitly provided; otherwise automatically detect receiver device language
     const isSpanish = urlLang ? (urlLang.toLowerCase() === 'es') : browserLang.startsWith('es');
+    const isExercise = id.startsWith('EXE-') || window.location.pathname.includes('/exercise');
+    const isSplitDay = id.startsWith('SLD-') || window.location.pathname.includes('/day');
 
-    // 2. Set dynamic text & translate
     const titleEl = document.getElementById('title');
     const subtitleEl = document.getElementById('subtitle');
     const fallbackBtnEl = document.getElementById('fallback-btn');
 
     if (isSpanish) {
+      document.title = isExercise
+        ? 'TRAIN: Importar ejercicio'
+        : isSplitDay
+        ? 'TRAIN: Importar día de split'
+        : 'TRAIN: Importar rutina';
       if (name) {
         titleEl.textContent = "Importando '" + decodeURIComponent(name) + "' en TRAIN...";
       } else {
         titleEl.textContent = "Abriendo la aplicación TRAIN...";
       }
-      subtitleEl.textContent = "Preparando la importación de tu rutina";
+      subtitleEl.textContent = isExercise
+        ? "Preparando la importación de tu ejercicio"
+        : isSplitDay
+        ? "Preparando la importación de tu día de entrenamiento"
+        : "Preparando la importación de tu rutina";
       fallbackBtnEl.textContent = "Toca si la aplicación no se abrió";
     } else {
+      document.title = isExercise
+        ? 'TRAIN: Import Exercise'
+        : isSplitDay
+        ? 'TRAIN: Import Split Day'
+        : 'TRAIN: Import Split';
       if (name) {
         titleEl.textContent = "Importing '" + decodeURIComponent(name) + "' into TRAIN...";
       } else {
         titleEl.textContent = "Opening TRAIN App...";
       }
-      subtitleEl.textContent = "Preparing your workout split import";
+      subtitleEl.textContent = isExercise
+        ? "Preparing your custom exercise import"
+        : isSplitDay
+        ? "Preparing your workout split day import"
+        : "Preparing your workout split import";
       fallbackBtnEl.textContent = "Tap if app did not open";
     }
 
-    // Preview mode check (allows viewing the rendered page without auto-redirecting)
     const isPreview = params.get('preview') === 'true' || params.has('preview') || params.has('noredirect');
+    const deepLinkUrl = "com.iamchriskjr.trainworkoutapp://import-split?id=" + encodeURIComponent(id);
+    const fallbackUrl = "https://link.trainworkoutapp.com/bZpd/split_share";
 
-    // 3. Construct deep link & fallback URLs
-    const deepLinkUrl = "com.iamchriskjr.trainworkoutapp://import-split?id=" + encodeURIComponent(id || "");
-    const fallbackUrl = "https://link.trainworkoutapp.com/5tgqfu";
-
-    // Set buttons/links
     fallbackBtnEl.href = deepLinkUrl;
 
     if (!isPreview) {
-      // 4. Execute deep link redirect immediately
       if (id) {
         window.location.href = deepLinkUrl;
       }
-
-      // 5. Fallback timer if app is not installed
       setTimeout(function() {
-        // Check if page is still visible (if app opened, visibilityState will be hidden)
         if (document.visibilityState === 'visible') {
           window.location.href = fallbackUrl;
         }
